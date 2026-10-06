@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/fondo_claro">
+
+    <!-- BOTÓN ATRÁS -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAtrasCatalogo"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="8dp"
+
+        android:text="← Atrás"
+        android:textAllCaps="false"
+        android:textColor="@color/rosa_principal"
+
+        android:backgroundTint="@color/blanco"
+
+        android:clickable="true"
+        android:focusable="true"
+
+        app:cornerRadius="12dp" />
+
+    <!-- TÍTULO -->
+
+    <TextView
+        android:id="@+id/tvTituloCatalogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="8dp"
+
+        android:text="Catálogo"
+        android:textColor="@color/rosa_principal"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <!-- SUBTÍTULO -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="15dp"
+
+        android:text="Moda Urbana"
+        android:textColor="@color/texto_secundario"
+        android:textSize="15sp" />
+
+    <!-- LISTA DE PRODUCTOS -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCatalogo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- CARRITO -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCarrito"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Ver carrito"
+        android:textAllCaps="false"
+
+        app:backgroundTint="@color/rosa_principal"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>

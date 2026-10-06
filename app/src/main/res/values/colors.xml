@@ -1,5 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores principales de ModaApp -->
+
+    <color name="rosa_principal">#E91E63</color>
+
+    <color name="rosa_oscuro">#C2185B</color>
+
+    <color name="fondo_claro">#FFF8FB</color>
+
+    <color name="texto_principal">#222222</color>
+
+    <color name="texto_secundario">#757575</color>
+
+    <color name="blanco">#FFFFFF</color>
+
+    <color name="negro">#000000</color>
+
+    <color name="gris_claro">#EEEEEE</color>
+
 </resources>

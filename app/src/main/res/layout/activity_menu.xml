@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+
+    android:background="@color/fondo_claro">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="ModaApp"
+        android:textColor="@color/rosa_principal"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="35dp"
+
+        android:text="Panel de administración"
+        android:textColor="@color/texto_secundario"
+        android:textSize="16sp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRopa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Gestión de ropa"
+        android:textAllCaps="false"
+
+        app:backgroundTint="@color/rosa_principal"
+        app:cornerRadius="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPedidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="12dp"
+
+        android:text="Pedidos"
+        android:textAllCaps="false"
+
+        app:backgroundTint="@color/rosa_principal"
+        app:cornerRadius="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClientes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="12dp"
+
+        android:text="Clientes"
+        android:textAllCaps="false"
+
+        app:backgroundTint="@color/rosa_principal"
+        app:cornerRadius="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReportes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="12dp"
+
+        android:text="Reportes"
+        android:textAllCaps="false"
+
+        app:backgroundTint="@color/rosa_principal"
+        app:cornerRadius="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSalir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="25dp"
+
+        android:text="Cerrar sesión"
+        android:textAllCaps="false"
+        android:textColor="@color/rosa_principal"
+
+        app:backgroundTint="@color/blanco"
+        app:strokeColor="@color/rosa_principal"
+        app:strokeWidth="2dp"
+        app:cornerRadius="12dp"/>
+
+</LinearLayout>
