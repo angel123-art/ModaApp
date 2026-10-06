@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ModaApp">
 
-        <!-- LOGIN - PANTALLA INICIAL -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -40,6 +39,11 @@
 
         <activity
             android:name=".CarritoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".PedidoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 

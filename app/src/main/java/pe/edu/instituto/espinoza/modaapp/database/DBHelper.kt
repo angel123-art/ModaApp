@@ -7,12 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import pe.edu.instituto.espinoza.modaapp.model.Ropa
 
 class DBHelper(context: Context) :
-    SQLiteOpenHelper(context, "modaapp.db", null, 1) {
+    SQLiteOpenHelper(context, "modaapp.db", null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        // ==========================================
-        // USUARIOS
-        // ==========================================
         db.execSQL(
             """
             CREATE TABLE usuario (
@@ -25,7 +22,6 @@ class DBHelper(context: Context) :
             """.trimIndent()
         )
 
-        // Administrador inicial
         val admin = ContentValues().apply {
             put("nombre", "Administrador")
             put("usuario", "admin")
@@ -34,9 +30,6 @@ class DBHelper(context: Context) :
         }
         db.insert("usuario", null, admin)
 
-        // ==========================================
-        // CATEGORÃAS
-        // ==========================================
         db.execSQL(
             """
             CREATE TABLE categoria (
@@ -46,25 +39,12 @@ class DBHelper(context: Context) :
             """.trimIndent()
         )
 
-        val categorias = listOf(
-            "Polos",
-            "Camisas",
-            "Pantalones",
-            "Vestidos",
-            "Casacas",
-            "Accesorios"
-        )
-
+        val categorias = listOf("Polos", "Camisas", "Pantalones", "Vestidos", "Casacas", "Accesorios")
         for (categoria in categorias) {
-            val values = ContentValues().apply {
-                put("nombre", categoria)
-            }
+            val values = ContentValues().apply { put("nombre", categoria) }
             db.insert("categoria", null, values)
         }
 
-        // ==========================================
-        // ROPA
-        // ==========================================
         db.execSQL(
             """
             CREATE TABLE ropa (
@@ -79,15 +59,88 @@ class DBHelper(context: Context) :
             )
             """.trimIndent()
         )
+
+        db.execSQL(
+            """
+            CREATE TABLE cliente (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                telefono TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE pedido (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cliente_id INTEGER NOT NULL,
+                fecha TEXT NOT NULL,
+                total REAL NOT NULL,
+                estado TEXT NOT NULL DEFAULT 'PENDIENTE',
+                FOREIGN KEY(cliente_id) REFERENCES cliente(id)
+            )
+            """.trimIndent()
+        )
+
+        db.execSQL(
+            """
+            CREATE TABLE detalle_pedido (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pedido_id INTEGER NOT NULL,
+                ropa_id INTEGER NOT NULL,
+                cantidad INTEGER NOT NULL,
+                precio REAL NOT NULL,
+                subtotal REAL NOT NULL,
+                FOREIGN KEY(pedido_id) REFERENCES pedido(id),
+                FOREIGN KEY(ropa_id) REFERENCES ropa(id)
+            )
+            """.trimIndent()
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // No upgrade needed in v1
+        if (oldVersion < 2) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS cliente (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nombre TEXT NOT NULL,
+                    telefono TEXT NOT NULL
+                )
+                """.trimIndent()
+            )
+
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS pedido (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cliente_id INTEGER NOT NULL,
+                    fecha TEXT NOT NULL,
+                    total REAL NOT NULL,
+                    estado TEXT NOT NULL DEFAULT 'PENDIENTE',
+                    FOREIGN KEY(cliente_id) REFERENCES cliente(id)
+                )
+                """.trimIndent()
+            )
+
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS detalle_pedido (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    pedido_id INTEGER NOT NULL,
+                    ropa_id INTEGER NOT NULL,
+                    cantidad INTEGER NOT NULL,
+                    precio REAL NOT NULL,
+                    subtotal REAL NOT NULL,
+                    FOREIGN KEY(pedido_id) REFERENCES pedido(id),
+                    FOREIGN KEY(ropa_id) REFERENCES ropa(id)
+                )
+                """.trimIndent()
+            )
+        }
     }
 
-    // ==========================================
-    // INSERTAR ROPA
-    // ==========================================
     fun insertarRopa(ropa: Ropa): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -102,14 +155,10 @@ class DBHelper(context: Context) :
         return db.insert("ropa", null, values)
     }
 
-    // ==========================================
-    // LISTAR ROPA
-    // ==========================================
     fun obtenerRopa(): MutableList<Ropa> {
         val lista = mutableListOf<Ropa>()
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM ropa ORDER BY id DESC", null)
-
         while (cursor.moveToNext()) {
             val ropa = Ropa(
                 id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -127,16 +176,86 @@ class DBHelper(context: Context) :
         return lista
     }
 
-    // ==========================================
-    // VALIDAR USUARIO
-    // ==========================================
+    fun actualizarRopa(ropa: Ropa): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("codigo", ropa.codigo)
+            put("nombre", ropa.nombre)
+            put("categoria", ropa.categoria)
+            put("talla", ropa.talla)
+            put("color", ropa.color)
+            put("precio", ropa.precio)
+            put("stock", ropa.stock)
+        }
+        return db.update("ropa", values, "id = ?", arrayOf(ropa.id.toString()))
+    }
+
+    fun eliminarRopa(id: Int): Int {
+        val db = writableDatabase
+        return db.delete("ropa", "id = ?", arrayOf(id.toString()))
+    }
+
+    fun existeCodigo(codigo: String, idExcluir: Int? = null): Boolean {
+        val db = readableDatabase
+        val query = if (idExcluir == null) "SELECT id FROM ropa WHERE codigo = ?" else "SELECT id FROM ropa WHERE codigo = ? AND id != ?"
+        val args = if (idExcluir == null) arrayOf(codigo) else arrayOf(codigo, idExcluir.toString())
+        val cursor = db.rawQuery(query, args)
+        val existe = cursor.moveToFirst()
+        cursor.close()
+        return existe
+    }
+
+    fun insertarCliente(nombre: String, telefono: String): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("nombre", nombre)
+            put("telefono", telefono)
+        }
+        return db.insert("cliente", null, values)
+    }
+
+    fun insertarPedido(clienteId: Long, total: Double): Long {
+        val db = writableDatabase
+        val fecha = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+        val values = ContentValues().apply {
+            put("cliente_id", clienteId)
+            put("fecha", fecha)
+            put("total", total)
+            put("estado", "PENDIENTE")
+        }
+        return db.insert("pedido", null, values)
+    }
+
+    fun insertarDetallePedido(pedidoId: Long, ropaId: Int, cantidad: Int, precio: Double): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("pedido_id", pedidoId)
+            put("ropa_id", ropaId)
+            put("cantidad", cantidad)
+            put("precio", precio)
+            put("subtotal", cantidad * precio)
+        }
+        return db.insert("detalle_pedido", null, values)
+    }
+
+    fun descontarStock(ropaId: Int, cantidad: Int): Int {
+        val db = writableDatabase
+        val cursor = db.rawQuery("SELECT stock FROM ropa WHERE id = ?", arrayOf(ropaId.toString()))
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            return 0
+        }
+        val stockActual = cursor.getInt(0)
+        cursor.close()
+        if (stockActual < cantidad) return 0
+        val values = ContentValues().apply { put("stock", stockActual - cantidad) }
+        return db.update("ropa", values, "id = ?", arrayOf(ropaId.toString()))
+    }
+
     fun validarUsuario(usuario: String, clave: String): Boolean {
         val db = readableDatabase
         val cursor = db.rawQuery(
-            """
-            SELECT id FROM usuario
-            WHERE usuario = ? AND clave = ? AND rol = 'ADMIN'
-            """.trimIndent(),
+            "SELECT id FROM usuario WHERE usuario = ? AND clave = ? AND rol = 'ADMIN'",
             arrayOf(usuario, clave)
         )
         val valido = cursor.moveToFirst()
