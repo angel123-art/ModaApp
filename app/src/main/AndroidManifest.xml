@@ -1,5 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
@@ -12,50 +14,82 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ModaApp">
 
+        <!-- LOGIN - PANTALLA INICIAL -->
+
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
+
+
+        <!-- MENU -->
 
         <activity
             android:name=".MenuActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+
+        <!-- CATALOGO -->
+
         <activity
             android:name=".CatalogoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+
+        <!-- ROPA -->
 
         <activity
             android:name=".RopaActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+
+        <!-- CARRITO -->
+
         <activity
             android:name=".CarritoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+
+        <!-- PEDIDO -->
 
         <activity
             android:name=".PedidoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+
+        <!-- PEDIDOS -->
+
         <activity
             android:name=".PedidosActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+
+        <!-- CLIENTES -->
+
         <activity
             android:name=".ClientesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+
+        <!-- REPORTES -->
 
         <activity
             android:name=".ReportesActivity"
